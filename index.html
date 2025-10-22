@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM MiniApp - Управление бизнесом</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CRM MiniApp">
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Загрузка...</p>
+    </div>
+
+    <!-- App Container -->
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">CRM MiniApp</h1>
+                <div class="header-actions">
+                    <div class="profession-switcher">
+                        <button class="profession-btn active" data-profession="manicurist" title="Маникюрщица">
+                            💅
+                        </button>
+                        <button class="profession-btn" data-profession="masseur" title="Массажист">
+                            🧘
+                        </button>
+                        <button class="profession-btn" data-profession="hairdresser" title="Парикмахер">
+                            💇
+                        </button>
+                        <button class="profession-btn" data-profession="cosmetologist" title="Косметолог">
+                            ✨
+                        </button>
+                    </div>
+                    <button id="notification-btn" class="icon-btn" aria-label="Уведомления">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span id="notification-count" class="notification-badge hidden">0</span>
+                    </button>
+                    <button id="settings-btn" class="icon-btn" aria-label="Настройки">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section active">
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face" alt="Анна Петрова" id="profile-image">
+                            <div class="profile-status"></div>
+                        </div>
+                        <div class="profile-info">
+                            <h2 class="profile-name" id="profile-name">Анна Петрова</h2>
+                            <p class="profile-role" id="profile-role">Мастер маникюра</p>
+                            <div class="profile-stats">
+                                <div class="profile-stat">
+                                    <span class="stat-icon">👥</span>
+                                    <span class="stat-value" id="profile-clients">5k</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="stat-icon">📅</span>
+                                    <span class="stat-value" id="profile-appointments">24</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="stat-icon">⭐</span>
+                                    <span class="stat-value" id="profile-rating">5.0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="key-metrics">
+                    <div class="metric-card passed-levels">
+                        <div class="metric-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22,4 12,14.01 9,11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <h3 class="metric-value" id="completed-services">17</h3>
+                            <p class="metric-label">Выполнено услуг</p>
+                        </div>
+                    </div>
+                    <div class="metric-card heart-rate">
+                        <div class="metric-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <h3 class="metric-value" id="satisfaction-rate">98%</h3>
+                            <p class="metric-label">Удовлетворенность</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Services -->
+                <div class="popular-services">
+                    <div class="section-header">
+                        <h3>Популярные услуги</h3>
+                        <button class="see-all-btn">Смотреть все ></button>
+                    </div>
+                    <div class="service-card featured">
+                        <div class="service-header">
+                            <div class="service-info">
+                                <h4>Классический маникюр</h4>
+                                <p>Выберите уровень сложности и начните сегодня!</p>
+                            </div>
+                            <button class="expand-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="service-levels">
+                            <p class="levels-label">Уровни:</p>
+                            <div class="levels-container">
+                                <div class="level-btn completed">01</div>
+                                <div class="level-btn completed">02</div>
+                                <div class="level-btn completed">03</div>
+                                <div class="level-btn completed">04</div>
+                                <div class="level-btn">05</div>
+                                <div class="level-btn">06</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-info">
+                                <h4>Покрытие гель-лаком</h4>
+                                <p>Долговременное покрытие для красивых ногтей</p>
+                            </div>
+                            <button class="expand-btn collapsed">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-info">
+                                <h4>Дизайн ногтей</h4>
+                                <p>Уникальные дизайны для особых случаев</p>
+                            </div>
+                            <button class="expand-btn collapsed">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="progress-section">
+                    <div class="section-header">
+                        <h3>Прогресс</h3>
+                        <button class="details-btn">Детали ></button>
+                    </div>
+                    <div class="progress-cards">
+                        <div class="progress-card">
+                            <div class="progress-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 12l2 2 4-4"></path>
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                </svg>
+                            </div>
+                            <div class="progress-content">
+                                <h4>Маникюр</h4>
+                                <div class="progress-percentage">64%</div>
+                            </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </div>
+                            <div class="progress-content">
+                                <h4>Педикюр</h4>
+                                <div class="progress-percentage">91%</div>
+                            </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 9V5a3 3 0 0 0-6 0v4"></path>
+                                    <rect x="2" y="9" width="20" height="12" rx="2" ry="2"></rect>
+                                </svg>
+                            </div>
+                            <div class="progress-content">
+                                <h4>Дизайн</h4>
+                                <div class="progress-percentage">70%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="top-performers">
+                    <div class="section-header">
+                        <h3>Лучшие мастера месяца</h3>
+                        <button class="full-list-btn">Полный список ></button>
+                    </div>
+                    <div class="performers-avatars">
+                        <div class="performer-avatar">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Мария">
+                        </div>
+                        <div class="performer-avatar">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Алексей">
+                        </div>
+                        <div class="performer-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face" alt="Анна">
+                        </div>
+                        <div class="performer-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Дмитрий">
+                        </div>
+                        <div class="performer-avatar">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Елена">
+                        </div>
+                    </div>
+                    <p class="performers-message">Попробуйте соревноваться с ними!</p>
+                </div>
+                </div>
+            </section>
+
+            <!-- Clients Section -->
+            <section id="clients-section" class="section">
+                <div class="section-header">
+                    <h2>Клиенты</h2>
+                    <button id="add-client-btn" class="add-btn" aria-label="Добавить клиента">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" id="client-search" placeholder="Поиск клиентов..." class="search-input">
+                    </div>
+                </div>
+
+                <div id="clients-list" class="clients-list">
+                    <!-- Client cards will be populated by JS -->
+                </div>
+            </section>
+
+            <!-- Tasks Section -->
+            <section id="tasks-section" class="section">
+                <div class="section-header">
+                    <h2>Задачи</h2>
+                    <button id="add-task-btn" class="add-btn" aria-label="Добавить задачу">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="task-filters">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="pending">В работе</button>
+                    <button class="filter-btn" data-filter="completed">Выполнено</button>
+                </div>
+
+                <div id="tasks-list" class="tasks-list">
+                    <!-- Task items will be populated by JS -->
+                </div>
+            </section>
+
+            <!-- Invoices Section -->
+            <section id="invoices-section" class="section">
+                <div class="section-header">
+                    <h2>Счета</h2>
+                    <button id="add-invoice-btn" class="add-btn" aria-label="Добавить счет">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="invoice-filters">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="pending">Ожидают</button>
+                    <button class="filter-btn" data-filter="paid">Оплачены</button>
+                </div>
+
+                <div id="invoices-list" class="invoices-list">
+                    <!-- Invoice items will be populated by JS -->
+                </div>
+            </section>
+
+            <!-- Marketing Section -->
+            <section id="marketing-section" class="section">
+                <div class="section-header">
+                    <h2>Реклама</h2>
+                    <div class="marketing-status">
+                        <span class="status-badge developing">В разработке</span>
+                    </div>
+                </div>
+
+                <div class="marketing-placeholder">
+                    <div class="placeholder-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3>Интеграция с Яндекс.Директ</h3>
+                    <p>Скоро здесь будет доступна интеграция с рекламными кампаниями</p>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="statistics-section" class="section">
+                <div class="section-header">
+                    <h2>Статистика</h2>
+                    <div class="time-filter">
+                        <select class="time-select">
+                            <option value="today">Сегодня</option>
+                            <option value="week">Неделя</option>
+                            <option value="month">Месяц</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Услуги в час</h3>
+                            <div class="chart-badge">Лучший результат</div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-bars">
+                                <div class="chart-bar" data-value="276" data-time="9:00">
+                                    <div class="bar-fill" style="height: 40%"></div>
+                                    <span class="bar-value">276</span>
+                                </div>
+                                <div class="chart-bar" data-value="128" data-time="10:00">
+                                    <div class="bar-fill" style="height: 18%"></div>
+                                    <span class="bar-value">128</span>
+                                </div>
+                                <div class="chart-bar" data-value="370" data-time="11:00">
+                                    <div class="bar-fill" style="height: 53%"></div>
+                                    <span class="bar-value">370</span>
+                                </div>
+                                <div class="chart-bar highest" data-value="400" data-time="12:00">
+                                    <div class="bar-fill" style="height: 57%"></div>
+                                    <span class="bar-value">400</span>
+                                    <div class="highest-badge">Лучший результат</div>
+                                </div>
+                                <div class="chart-bar" data-value="346" data-time="13:00">
+                                    <div class="bar-fill" style="height: 49%"></div>
+                                    <span class="bar-value">346</span>
+                                </div>
+                                <div class="chart-bar" data-value="128" data-time="14:00">
+                                    <div class="bar-fill" style="height: 18%"></div>
+                                    <span class="bar-value">128</span>
+                                </div>
+                            </div>
+                            <div class="chart-labels">
+                                <span>9:00</span>
+                                <span>10:00</span>
+                                <span>11:00</span>
+                                <span>12:00</span>
+                                <span>13:00</span>
+                                <span>14:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn goals">
+                        <span>Цели</span>
+                    </button>
+                    <button class="action-btn rewards">
+                        <span>Награды</span>
+                    </button>
+                    <button class="action-btn support">
+                        <span>Поддержка</span>
+                    </button>
+                </div>
+
+                <!-- Summary Stats -->
+                <div class="summary-stats">
+                    <div class="summary-stat">
+                        <div class="stat-number">8k+</div>
+                        <div class="stat-label">услуг выполнено</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Достигнуто</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-number">90%</div>
+                        <div class="stat-label">Высокий уровень</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SMS Section -->
+            <section id="sms-section" class="section">
+                <div class="section-header">
+                    <h2>Авторассылки</h2>
+                    <button id="create-sms-btn" class="add-btn" aria-label="Создать рассылку">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="sms-campaigns-list" class="sms-list">
+                    <!-- SMS campaigns will be populated by JS -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-section="dashboard">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Главная</span>
+            </button>
+            <button class="nav-item" data-section="clients">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Клиенты</span>
+            </button>
+            <button class="nav-item" data-section="tasks">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+                <span>Задачи</span>
+            </button>
+            <button class="nav-item" data-section="invoices">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span>Счета</span>
+            </button>
+            <button class="nav-item" data-section="statistics">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 20V10"></path>
+                    <path d="M12 20V4"></path>
+                    <path d="M6 20v-6"></path>
+                </svg>
+                <span>Статистика</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Modals -->
+    <!-- Client Modal -->
+    <div id="client-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="client-modal-title">Добавить клиента</h3>
+                <button class="modal-close" onclick="app.closeModal('client-modal')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="client-form" class="form">
+                    <div class="form-group">
+                        <label for="client-name">Имя *</label>
+                        <input type="text" id="client-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-phone">Телефон *</label>
+                        <input type="tel" id="client-phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-email">Email</label>
+                        <input type="email" id="client-email">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-company">Компания</label>
+                        <input type="text" id="client-company">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-notes">Заметки</label>
+                        <textarea id="client-notes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="app.closeModal('client-modal')">Отмена</button>
+                <button type="submit" form="client-form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="task-modal-title">Добавить задачу</h3>
+                <button class="modal-close" onclick="app.closeModal('task-modal')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="task-form" class="form">
+                    <div class="form-group">
+                        <label for="task-title">Название *</label>
+                        <input type="text" id="task-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Описание</label>
+                        <textarea id="task-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-client">Клиент</label>
+                        <select id="task-client">
+                            <option value="">Выберите клиента</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-date">Срок выполнения</label>
+                        <input type="datetime-local" id="task-due-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Приоритет</label>
+                        <select id="task-priority">
+                            <option value="low">Низкий</option>
+                            <option value="medium" selected>Средний</option>
+                            <option value="high">Высокий</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="app.closeModal('task-modal')">Отмена</button>
+                <button type="submit" form="task-form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoice-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="invoice-modal-title">Добавить счет</h3>
+                <button class="modal-close" onclick="app.closeModal('invoice-modal')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="invoice-form" class="form">
+                    <div class="form-group">
+                        <label for="invoice-client">Клиент *</label>
+                        <select id="invoice-client" required>
+                            <option value="">Выберите клиента</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice-amount">Сумма *</label>
+                        <input type="number" id="invoice-amount" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice-description">Описание</label>
+                        <textarea id="invoice-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice-due-date">Срок оплаты</label>
+                        <input type="date" id="invoice-due-date">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="app.closeModal('invoice-modal')">Отмена</button>
+                <button type="submit" form="invoice-form" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SMS Modal -->
+    <div id="sms-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="sms-modal-title">Создать рассылку</h3>
+                <button class="modal-close" onclick="app.closeModal('sms-modal')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="sms-form" class="form">
+                    <div class="form-group">
+                        <label for="sms-title">Название рассылки *</label>
+                        <input type="text" id="sms-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sms-message">Сообщение *</label>
+                        <textarea id="sms-message" rows="4" maxlength="160" required></textarea>
+                        <small class="char-count">0/160 символов</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="sms-clients">Получатели</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="select-all-clients">
+                                <span>Выбрать всех клиентов</span>
+                            </label>
+                        </div>
+                        <div id="clients-checkboxes" class="clients-checkboxes">
+                            <!-- Client checkboxes will be populated by JS -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="app.closeModal('sms-modal')">Отмена</button>
+                <button type="submit" form="sms-form" class="btn btn-primary">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
+
